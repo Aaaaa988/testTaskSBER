@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class PropertiesLoad {
+    private static PropertiesLoad instance;
     @Getter @Setter
     private String host;
     @Getter @Setter
@@ -29,5 +30,12 @@ public class PropertiesLoad {
         System.out.println("/*-----------Properties:----------------------------------------------------------------*/");
         System.out.println("HOST: " + host + ", BaseName: " + baseName + ", LOGIN: " + login + ", PASSWORD: " + password );
         System.out.println("/*--------------------------------------------------------------------------------------*/");
+    }
+
+    public static PropertiesLoad getInstance() throws IOException {
+        if (instance == null) {
+            instance = new PropertiesLoad();
+        }
+        return instance;
     }
 }
