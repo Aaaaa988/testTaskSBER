@@ -5,12 +5,19 @@ import com.kiselev.database.TaskOneTables;
 import com.kiselev.database.dbUtils;
 import com.kiselev.entity.Accounts;
 import com.kiselev.entity.Contracts;
+import com.kiselev.entity.Kind_contracts;
+import com.kiselev.entity.Types_reg;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Properties;
 
 public class TaskOne {
+    @Getter
     private Connection connection = null;
+    @Getter
     private Statement statement = null;
 
     public TaskOne() throws SQLException, IOException {
@@ -33,31 +40,69 @@ public class TaskOne {
 
     public void subTaskOne() throws SQLException {
         String sql;
-        sql = "SELECT * FROM accounts";
+        sql = "SELECT" +
+                "    contracts.num as c_num," +
+                "    accounts.num as a_num," +
+                "    kind_contracts.name as ks_name," +
+                "    types_reg.name as t_name " +
+                "FROM contracts" +
+                "         LEFT JOIN accounts on contracts.acc_ref = accounts.id" +
+                "         LEFT JOIN kind_contracts on contracts.kind_ref = kind_contracts.id" +
+                "         LEFT JOIN types_reg on kind_contracts.type_ref = types_reg.id";
 
         ResultSet resultSet = statement.executeQuery(sql);
-
-        System.out.println("Retrieving data from database...");
-        System.out.println("\nAccounts:");
-        Accounts accounts = new Accounts();
-        while (resultSet.next()) {
-            accounts.setId(resultSet.getInt("id"));
-            accounts.setNum(resultSet.getString("num"));
-
-
-            System.out.println("================");
-            System.out.println(accounts.toString());
-
-
+        while (resultSet.next()){
+            System.out.println(
+                    resultSet.getInt("c_num") +" "+
+                    resultSet.getString("a_num") +" "+
+                            resultSet.getString("ks_name") +" "+
+                            resultSet.getString("t_name"));
         }
-        //System.out.println(dbUtils.getMaxId(statement, "accounts"));
-
-        /*Contracts contracts = new Contracts();
-        contracts.setId(2);
-        contracts.setNum("453434");
-        System.out.println(contracts.toString());*/
 
     }
+
+    public void fillTablesTestData() throws SQLException {
+        dbUtils.clearTable(statement, "contracts");
+        dbUtils.clearTable(statement, "types_reg");
+        dbUtils.clearTable(statement, "accounts");
+        dbUtils.clearTable(statement, "kind_contracts");
+
+
+
+        Types_reg typeOne = new Types_reg(dbUtils.getMaxId(statement, "types_reg"),"электроный");
+        Types_reg typeTwo = new Types_reg(dbUtils.getMaxId(statement, "types_reg"),"бумажный");
+        Kind_contracts kind_contractsOne = new Kind_contracts(dbUtils.getMaxId(statement, "kind_contracts"),"Contract arend", typeOne);
+
+
+        ArrayList<Contracts> contractsList = new ArrayList<>();
+        contractsList.add(new Contracts(
+                0,
+                "0437099347",
+                new Accounts(dbUtils.getMaxId(statement, "accounts"), "20565147"),
+                kind_contractsOne));
+
+        contractsList.add(new Contracts(
+                1001,
+                "0437444347",
+                new Accounts(dbUtils.getMaxId(statement, "accounts")+1, "00335147"),
+                kind_contractsOne));
+
+        contractsList.add(new Contracts(
+                131,
+                "0444347",
+                null,
+                kind_contractsOne));
+
+
+
+
+            contractsList.get(0).toDataBase(connection);
+        contractsList.get(1).toDataBase(connection);
+        contractsList.get(2).toDataBase(connection);
+
+            connection.commit();
+    }
+
 
     public void closeConnection() throws SQLException {
         connection.close();

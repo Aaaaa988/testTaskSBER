@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.*;
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class Contracts {
@@ -31,5 +33,33 @@ public class Contracts {
         else
             stringBuilder.append(" kind_ref: (Не указан)");
         return stringBuilder.toString();
+    }
+
+    public void toDataBase(Connection connection) throws SQLException {
+        String query = "INSERT IGNORE INTO contracts(id, num,acc_ref, kind_ref) VALUES(?, ?, ?, ?)";
+
+        PreparedStatement pstmt = connection.prepareStatement(query);
+
+        pstmt.setInt(1, this.getId());
+        pstmt.setString(2, this.getNum());
+        if(acc_ref != null){
+            acc_ref.toDataBase(connection);
+            pstmt.setInt(3, acc_ref.getId());
+        }else{
+            pstmt.setNull(3, Types.INTEGER);
+        }
+
+
+        if(kind_ref != null){
+            kind_ref.toDataBase(connection);
+            pstmt.setInt(4, kind_ref.getId());
+        }else{
+            pstmt.setNull(4, Types.INTEGER);
+        }
+
+
+
+        pstmt.executeUpdate();
+
     }
 }
