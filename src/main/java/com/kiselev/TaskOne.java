@@ -12,7 +12,6 @@ import lombok.Getter;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Properties;
 
 public class TaskOne {
     @Getter
@@ -38,25 +37,50 @@ public class TaskOne {
 
     }
 
-    public void subTaskOne() throws SQLException {
-        String sql;
-        sql = "SELECT" +
-                "    contracts.num as c_num," +
-                "    accounts.num as a_num," +
-                "    kind_contracts.name as ks_name," +
-                "    types_reg.name as t_name " +
-                "FROM contracts" +
-                "         LEFT JOIN accounts on contracts.acc_ref = accounts.id" +
-                "         LEFT JOIN kind_contracts on contracts.kind_ref = kind_contracts.id" +
-                "         LEFT JOIN types_reg on kind_contracts.type_ref = types_reg.id";
+    private String strFormater(String str, int size){
+        StringBuilder stringBuilder = new StringBuilder(str);
+        for (int i = (str.length()/2)+1; i <size; i++){
+            stringBuilder.insert(0, " ");
+        }
+        return stringBuilder.toString();
+    }
 
+    public void subTaskOne() throws SQLException {
+        System.out.println("\nЗадание: 1");
+        System.out.println("Вывести список всех договоров в виде (учесть, что ссылка может быть null):\n" +
+                "NUM (номер договора)\tACC_NUM (номер счёта), если \"пусто\", выводить \"(не указан)\"\tKIND_NAME (вид договора), если \"пусто\", выводить \"(не указан)\"\tTYPE_NAME (наименование типа), если \"пусто\", выводить \"(не указан)\"\n");
+
+        String sql = "SELECT" +
+                     "    contracts.num as c_num," +
+                     "    accounts.num as a_num," +
+                     "    kind_contracts.name as ks_name," +
+                     "    types_reg.name as t_name " +
+                     "FROM contracts" +
+                     "         LEFT JOIN accounts on contracts.acc_ref = accounts.id" +
+                     "         LEFT JOIN kind_contracts on contracts.kind_ref = kind_contracts.id" +
+                     "         LEFT JOIN types_reg on kind_contracts.type_ref = types_reg.id";
+
+        System.out.println("Ответ:");
+        System.out.println("|NUM (номер договора)|\tACC_NUM (номер счёта)|\tKIND_NAME (вид договора)|\tTYPE_NAME (наименование типа)|");
         ResultSet resultSet = statement.executeQuery(sql);
         while (resultSet.next()){
-            System.out.println(
-                    resultSet.getInt("c_num") +" "+
-                    resultSet.getString("a_num") +" "+
-                            resultSet.getString("ks_name") +" "+
-                            resultSet.getString("t_name"));
+            System.out.printf("|%20d|\t", resultSet.getInt("c_num"));
+            if(resultSet.getString("a_num") == null)
+                System.out.printf("%29s|\t", "(не указан)");
+                else
+                    System.out.printf("%21s|\t", resultSet.getString("a_num"));
+
+            if(resultSet.getString("ks_name") == null)
+                System.out.print(strFormater("(не указан)"+"|", 24));
+            else
+                System.out.print(strFormater(resultSet.getString("ks_name")+"|", 25));
+
+            if(resultSet.getString("t_name") == null)
+                System.out.print(strFormater("(не указан)"+"|", 32));
+            else
+                System.out.print(strFormater(resultSet.getString("t_name")+"|", 33));
+
+            System.out.println();
         }
 
     }
@@ -67,11 +91,11 @@ public class TaskOne {
         dbUtils.clearTable(statement, "accounts");
         dbUtils.clearTable(statement, "kind_contracts");
 
-
-
-        Types_reg typeOne = new Types_reg(dbUtils.getMaxId(statement, "types_reg"),"электроный");
-        Types_reg typeTwo = new Types_reg(dbUtils.getMaxId(statement, "types_reg"),"бумажный");
-        Kind_contracts kind_contractsOne = new Kind_contracts(dbUtils.getMaxId(statement, "kind_contracts"),"Contract arend", typeOne);
+        Types_reg typeOne = new Types_reg(0,"электроный");
+        Types_reg typeTwo = new Types_reg(1,"бумажный");
+        Kind_contracts kind_contractsOne = new Kind_contracts(0,"Контракт аренды", typeOne);
+        Kind_contracts kind_contractsTwo = new Kind_contracts(1,"Контракт найма", typeTwo);
+        Kind_contracts kind_contractsThree = new Kind_contracts(2,"Контракт найма", null);
 
 
         ArrayList<Contracts> contractsList = new ArrayList<>();
@@ -82,31 +106,43 @@ public class TaskOne {
                 kind_contractsOne));
 
         contractsList.add(new Contracts(
-                1001,
+                1,
                 "0437444347",
                 new Accounts(dbUtils.getMaxId(statement, "accounts")+1, "00335147"),
                 kind_contractsOne));
 
         contractsList.add(new Contracts(
-                131,
+                2,
                 "0444347",
                 null,
-                kind_contractsOne));
+                kind_contractsTwo));
 
+        contractsList.add(new Contracts(
+                3,
+                "06578907",
+                null,
+                null));
 
+        contractsList.add(new Contracts(
+                4,
+                "06578436",
+                null,
+                null));
 
+        contractsList.add(new Contracts(
+                5,
+                "02325907",
+                null,
+                kind_contractsThree));
 
-            contractsList.get(0).toDataBase(connection);
-        contractsList.get(1).toDataBase(connection);
-        contractsList.get(2).toDataBase(connection);
-
+        for(Contracts c : contractsList){
+            c.toDataBase(connection);
+        }
             connection.commit();
     }
-
 
     public void closeConnection() throws SQLException {
         connection.close();
     }
-
 
 }
