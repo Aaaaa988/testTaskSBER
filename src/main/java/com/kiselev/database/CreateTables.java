@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class TaskOneTables {
+public class CreateTables {
     public Connection ConfigureBase(Connection connection, Statement statement, PropertiesLoad prop) throws SQLException {
         Connection connect = connection;
         statement.executeUpdate("CREATE DATABASE IF NOT EXISTS " + prop.getBaseName());
@@ -19,6 +19,16 @@ public class TaskOneTables {
                 "(id INTEGER (10) NOT NULL, " +
                 " num VARCHAR(20) NOT NULL UNIQUE, " +
                 " PRIMARY KEY (id))";
+        statement.executeUpdate(SQL);
+
+        SQL = "CREATE TABLE IF NOT EXISTS movements " +
+                "(id INTEGER (10) NOT NULL," +
+                " id_acc INTEGER (10) NOT NULL, " +
+                " date DATE NOT NULL," +
+                " amount DOUBLE," +
+                " operation BOOL," +
+                " PRIMARY KEY (id)," +
+                " FOREIGN KEY (id_acc) REFERENCES accounts(id) ON DELETE CASCADE)";
         statement.executeUpdate(SQL);
 
         SQL = "CREATE TABLE IF NOT EXISTS types_reg " +

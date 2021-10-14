@@ -1,7 +1,7 @@
 package com.kiselev;
 
 import com.kiselev.database.PropertiesLoad;
-import com.kiselev.database.TaskOneTables;
+import com.kiselev.database.CreateTables;
 import com.kiselev.database.dbUtils;
 import com.kiselev.entity.Accounts;
 import com.kiselev.entity.Contracts;
@@ -24,9 +24,9 @@ public class TaskOne {
         connection = DriverManager.getConnection(prop.getHost(), prop.getLogin(), prop.getPassword());
         statement = connection.createStatement();
 
-        TaskOneTables taskOneTables = new TaskOneTables();
+        CreateTables createTables = new CreateTables();
 
-        connection = taskOneTables.ConfigureBase(connection, statement, prop);
+        connection = createTables.ConfigureBase(connection, statement, prop);
         connection.setAutoCommit(false);
         connection.commit();
         statement = connection.createStatement();
@@ -93,47 +93,23 @@ public class TaskOne {
 
         Types_reg typeOne = new Types_reg(0,"электроный");
         Types_reg typeTwo = new Types_reg(1,"бумажный");
+
         Kind_contracts kind_contractsOne = new Kind_contracts(0,"Контракт аренды", typeOne);
         Kind_contracts kind_contractsTwo = new Kind_contracts(1,"Контракт найма", typeTwo);
         Kind_contracts kind_contractsThree = new Kind_contracts(2,"Контракт найма", null);
 
+        Accounts accountsOne = new Accounts(0, "20565147");
+        Accounts accountsTwo = new Accounts(1, "00335147");
+        Accounts accountsThree = new Accounts(2, "03434147");
+        Accounts accountsFour = new Accounts(3, "03555147");
 
         ArrayList<Contracts> contractsList = new ArrayList<>();
-        contractsList.add(new Contracts(
-                0,
-                "0437099347",
-                new Accounts(dbUtils.getMaxId(statement, "accounts"), "20565147"),
-                kind_contractsOne));
-
-        contractsList.add(new Contracts(
-                1,
-                "0437444347",
-                new Accounts(dbUtils.getMaxId(statement, "accounts")+1, "00335147"),
-                kind_contractsOne));
-
-        contractsList.add(new Contracts(
-                2,
-                "0444347",
-                null,
-                kind_contractsTwo));
-
-        contractsList.add(new Contracts(
-                3,
-                "06578907",
-                null,
-                null));
-
-        contractsList.add(new Contracts(
-                4,
-                "06578436",
-                null,
-                null));
-
-        contractsList.add(new Contracts(
-                5,
-                "02325907",
-                null,
-                kind_contractsThree));
+        contractsList.add(new Contracts(0, "0437099347", accountsOne, kind_contractsOne));
+        contractsList.add(new Contracts(1, "0437444347", accountsTwo, kind_contractsOne));
+        contractsList.add(new Contracts(2, "0444347", null, kind_contractsTwo));
+        contractsList.add(new Contracts(3, "06578907", accountsThree, null));
+        contractsList.add(new Contracts(4, "06578436", null, null));
+        contractsList.add(new Contracts(5, "02325907", accountsFour, kind_contractsThree));
 
         for(Contracts c : contractsList){
             c.toDataBase(connection);
