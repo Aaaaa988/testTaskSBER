@@ -15,8 +15,8 @@ public class Main {
 
             TaskTwo taskTwo = new TaskTwo();
             taskTwo.fillTablesTestData();
-            //taskTwo.subTaskTwo("20565147", "2021-10-3");
-            //taskTwo.subTaskThree("20565147", "2021-10-1","2021-10-4");
+            taskTwo.subTaskTwo("20565147", "2021-10-1");
+            taskTwo.subTaskThree("20565147", "2021-10-1","2021-10-4");
             taskTwo.subTaskFour(3,"20565147", "2021-10-1","2026-10-5");
 
         } catch (IOException | SQLException e) {

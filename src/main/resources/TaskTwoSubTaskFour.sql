@@ -31,23 +31,10 @@ BEGIN
             END IF;
         END IF;
 
-        # Получение остатка  - остаток получаем за текущий день не включительно 'date < InSTartDate'
+        # Получение остатка  - остаток получаем за текущий день не включительно 'date < InTargetDate'
         # тоесть получаем остаток словно измерение происходит в 00:00 нового дня, как требуется по условию
-        select(
-            select IFNULL(sum(amount), 0)
-                from movements, accounts
-                where operation = 0
-                    and date < InTargetDate
-                    and accounts.num = num
-                    and movements.id_acc = accounts.id
-        ) - (
-            select IFNULL(sum(amount), 0)
-                from movements, accounts
-                where operation = 1
-                    and date < InTargetDate
-                    and accounts.num = num
-                    and movements.id_acc = accounts.id
-        ) into rest;
+        SELECT sum(if(operation = 0, 1, -1) * amount) as ostatok from movements, accounts
+        where  date < InTargetDate and accounts.num = num and movements.id_acc = accounts.id into rest;
 
         # Если остаток положителен, то происходит высчет процента
         IF(rest > 0) THEN

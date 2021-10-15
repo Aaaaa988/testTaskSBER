@@ -15,20 +15,13 @@ public class CreateTables {
         statement = connect.createStatement();
         String SQL = "";
 
+        /**
+         *  Таблица для Задания 1.
+         */
         SQL = "CREATE TABLE IF NOT EXISTS accounts " +
                 "(id INTEGER (10) NOT NULL, " +
                 " num VARCHAR(20) NOT NULL UNIQUE, " +
                 " PRIMARY KEY (id))";
-        statement.executeUpdate(SQL);
-
-        SQL = "CREATE TABLE IF NOT EXISTS movements " +
-                "(id INTEGER (10) NOT NULL," +
-                " id_acc INTEGER (10) NOT NULL, " +
-                " date DATE NOT NULL," +
-                " amount DOUBLE," +
-                " operation BOOL," +
-                " PRIMARY KEY (id)," +
-                " FOREIGN KEY (id_acc) REFERENCES accounts(id) ON DELETE CASCADE)";
         statement.executeUpdate(SQL);
 
         SQL = "CREATE TABLE IF NOT EXISTS types_reg " +
@@ -53,6 +46,19 @@ public class CreateTables {
                  " PRIMARY KEY (id)," +
                  " FOREIGN KEY (acc_ref) REFERENCES accounts(id) ON DELETE CASCADE," +
                  " FOREIGN KEY (kind_ref) REFERENCES kind_contracts(id) ON DELETE CASCADE)";
+        statement.executeUpdate(SQL);
+
+        /**
+         *  Таблица для Задания 2.
+         */
+        SQL = "CREATE TABLE IF NOT EXISTS movements " +
+                "(id INTEGER (10) NOT NULL," +
+                " id_acc INTEGER (10) NOT NULL, " +
+                " date DATE NOT NULL," +
+                " amount DOUBLE," +
+                " operation BOOL," +
+                " PRIMARY KEY (id)," +
+                " FOREIGN KEY (id_acc) REFERENCES accounts(id) ON DELETE CASCADE)";
         statement.executeUpdate(SQL);
 
         return connect;

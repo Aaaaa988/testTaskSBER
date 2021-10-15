@@ -41,13 +41,8 @@ public class TaskTwo {
         //Строго с текущим днем
 
         String sql = "" +
-                "select" +
-                "(select IFNULL(sum(amount), 0) from movements, accounts" +
-                "    where operation = 0 and date <= '"+date+"' and accounts.num = '"+acc_num+"' and movements.id_acc = accounts.id) " +
-                "    - " +
-                "(select IFNULL(sum(amount), 0) from movements, accounts" +
-                "    where operation = 1 and date <= '"+date+"' and accounts.num = '"+acc_num+"' and movements.id_acc = accounts.id) " +
-                "as rest;";
+                "SELECT sum(if(movements.operation = 0, 1, -1) * amount) as rest from movements, accounts " +
+                "where  date <= '"+date+"' and accounts.num = '"+acc_num+"' and movements.id_acc = accounts.id";
 
         ResultSet resultSet = statement.executeQuery(sql);
 
@@ -77,7 +72,8 @@ public class TaskTwo {
                 "select" +
                 "    (select IFNULL(sum(amount), 0)" +
                 "    from movements, accounts" +
-                "    where operation=0 and date BETWEEN '"+date1+"' and '"+date2+"'" +
+                "    where operation=0 " +
+                "      and date BETWEEN '"+date1+"' and '"+date2+"'" +
                 "      and accounts.num = '"+acc_num+"'" +
                 "      and movements.id_acc = accounts.id" +
                 "    ) as income," +
