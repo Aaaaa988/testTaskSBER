@@ -1,6 +1,8 @@
-DROP TABLE IF EXISTS type_operation;
-DROP TABLE IF EXISTS fact_operation;
 DROP TABLE IF EXISTS credit_contract;
+DROP TABLE IF EXISTS fact_operation;
+DROP TABLE IF EXISTS type_operation;
+
+
 
 CREATE TABLE type_operation(
     id INTEGER (10) NOT NULL,
