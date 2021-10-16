@@ -1,0 +1,7 @@
+DELETE FROM journal_procent WHERE 1=1;
+
+INSERT INTO journal_procent VALUES(0,'001122', '2021-10-1', '2021-11-1', 345);
+INSERT INTO journal_procent VALUES(1,'001122', '2021-11-3', '2021-12-1', 885);
+INSERT INTO journal_procent VALUES(10,'001122', '2021-12-1', '2021-12-6', 885);
+INSERT INTO journal_procent VALUES(2,'033122', '2021-11-3', '2021-12-1', 111);
+INSERT INTO journal_procent VALUES(3,'06662', '2021-10-15', '2021-11-10', 666);
