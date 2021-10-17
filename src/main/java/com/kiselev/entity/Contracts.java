@@ -57,8 +57,6 @@ public class Contracts {
             pstmt.setNull(4, Types.INTEGER);
         }
 
-
-
         pstmt.executeUpdate();
 
     }

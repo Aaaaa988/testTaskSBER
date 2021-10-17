@@ -5,12 +5,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class dbUtils {
-    /** Функция для получения значения последнего первичного ключа таблицы
-      *
-     */
+
     public static int getMaxId(Statement statement, String tableName) {
-
-
         String sql = "SELECT MAX(id) FROM " + tableName;
         try {
             ResultSet resultSet = statement.executeQuery(sql);
@@ -23,7 +19,6 @@ public class dbUtils {
 
     public static int clearTable(Statement statement, String tableName) {
         try {
-
             statement.execute("DELETE FROM " + tableName + " WHERE 1=1");
             System.out.println("Произошло удаление содержимого таблицы - " + tableName);
             return 0;

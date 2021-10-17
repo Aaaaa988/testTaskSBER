@@ -10,13 +10,13 @@ public class CreateTables {
         Connection connect = connection;
         statement.executeUpdate("CREATE DATABASE IF NOT EXISTS " + prop.getBaseName());
 
-        connection.close();
+        connect.close();
         connect = DriverManager.getConnection(prop.getHost() + prop.getBaseName(), prop.getLogin(), prop.getPassword());
         statement = connect.createStatement();
         String SQL = "";
 
         /**
-         *  Таблица для Задания 1.
+         *  Таблицы для Задания 1.
          */
         SQL = "CREATE TABLE IF NOT EXISTS accounts " +
                 "(id INTEGER (10) NOT NULL, " +
