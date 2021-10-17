@@ -50,12 +50,11 @@ public class TaskTwo {
         if(resultSet.next()) {
             if(resultSet.getDouble("rest") > 0){
                 System.out.println("Остаток по счету " + acc_num + " за дату " + date);
-                System.out.println(resultSet.getDouble("rest"));
+                System.out.println(String.format("%.2f", resultSet.getDouble("rest"))+ "р");
             }else{
                 System.out.println("Остаток отрицательный!");
             }
         }
-
     }
 
     public void subTaskThree(String acc_num, String date1, String date2) throws SQLException {
@@ -124,17 +123,19 @@ public class TaskTwo {
 
         Accounts accountsOne = new Accounts(0, "20565147");
         Accounts accountsTwo = new Accounts(1, "00335147");
-        Accounts accountsThree = new Accounts(2, "03434147");
-        Accounts accountsFour = new Accounts(3, "03555147");
 
         ArrayList<Movements> movementsList = new ArrayList<>();
 
-        movementsList.add(new Movements(1, accountsOne, "2021-10-1", 500, 0));
-        movementsList.add(new Movements(2, accountsOne, "2021-10-1", 235, 1));
-        movementsList.add(new Movements(3, accountsOne, "2021-10-3", 50, 0));
-        movementsList.add(new Movements(4, accountsOne, "2021-10-3", 543, 0));
-        movementsList.add(new Movements(5, accountsOne, "2021-10-3", 300, 1));
-        movementsList.add(new Movements(6, accountsOne, "2021-10-4", 111, 1));
+        movementsList.add(new Movements(11, accountsOne, "2021-10-1", 500.1, 0));
+        movementsList.add(new Movements(12, accountsOne, "2021-10-1", 235.2, 1));
+        movementsList.add(new Movements(13, accountsOne, "2021-10-3", 50.6, 0));
+        movementsList.add(new Movements(14, accountsOne, "2021-10-3", 543.5, 0));
+        movementsList.add(new Movements(15, accountsOne, "2021-10-3", 300.1, 1));
+        movementsList.add(new Movements(16, accountsOne, "2021-10-4", 111.2, 1));
+        movementsList.add(new Movements(17, accountsOne, "2021-10-5", 337.3, 1));
+
+        movementsList.add(new Movements(21, accountsTwo, "2021-10-4", 111.3, 1));
+        movementsList.add(new Movements(22, accountsTwo, "2021-10-4", 111.3, 1));
 
 
         for(Movements m : movementsList){

@@ -4,15 +4,16 @@ DELETE FROM type_operation WHERE 1=1;
 
 INSERT INTO type_operation VALUES(0, 'Погашение', 0);
 INSERT INTO type_operation VALUES(1, 'Займ', 1);
+INSERT INTO type_operation VALUES(2, 'Другой займ', 1);
 
-INSERT INTO fact_operation VALUES(0, 0, 300, '2021-10-1');
-INSERT INTO fact_operation VALUES(1, 1, 500, '2021-10-2');
-INSERT INTO fact_operation VALUES(2, 1, 300, '2021-10-2');
-INSERT INTO fact_operation VALUES(6, 1, 400, '2021-10-2');
-INSERT INTO fact_operation VALUES(3, 1, 100, '2021-10-3');
+INSERT INTO fact_operation VALUES(0, 0, 300.7, '2021-10-1');
+INSERT INTO fact_operation VALUES(1, 1, 500.5, '2021-10-2');
+INSERT INTO fact_operation VALUES(2, 2, 300.3, '2021-10-2');
+INSERT INTO fact_operation VALUES(6, 2, 400.3, '2021-10-2');
+INSERT INTO fact_operation VALUES(3, 1, 100.1, '2021-10-3');
 
-INSERT INTO fact_operation VALUES(4, 1, 300, '2021-10-2');
-INSERT INTO fact_operation VALUES(5, 1, 100, '2021-10-3');
+INSERT INTO fact_operation VALUES(4, 1, 300.6, '2021-10-2');
+INSERT INTO fact_operation VALUES(5, 1, 100.2, '2021-10-3');
 
 
 INSERT INTO credit_contract VALUES(0, '002341', 0);

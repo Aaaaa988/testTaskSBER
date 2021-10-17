@@ -5,12 +5,20 @@ SELECT SUM(procents)  AS sum_procentss
 FROM(
     SELECT  IF(@end_data < date2,
                 IF(@start_data > date1,
-                    ROUND((datediff(@end_data, @start_data) + 1) * (sum_procent/(datediff(date2, date1) + 1)), 2),
-                    ROUND((datediff(@end_data, date1) + 1) * (sum_procent/(datediff(date2, date1) + 1)), 2)),
+                    ROUND((datediff(@end_data, @start_data) + 1)
+                              * (sum_procent/(datediff(date2, date1) + 1)),
+                            2),
+                    ROUND((datediff(@end_data, date1) + 1)
+                              * (sum_procent/(datediff(date2, date1) + 1)),
+                            2)),
             IF(@start_data > date1,
                 IF(@end_data < date2,
-                    ROUND((datediff(@end_data, @start_data) + 1) * (sum_procent/(datediff(date2, date1) + 1)), 2),
-                    ROUND((datediff(date2, @start_data) + 1) * (sum_procent/(datediff(date2, date1) + 1)), 2)),
+                    ROUND((datediff(@end_data, @start_data) + 1)
+                              * (sum_procent/(datediff(date2, date1) + 1)),
+                            2),
+                    ROUND((datediff(date2, @start_data) + 1)
+                              * (sum_procent/(datediff(date2, date1) + 1)),
+                            2)),
                 sum_procent)
             ) AS procents
     FROM journal_procent
